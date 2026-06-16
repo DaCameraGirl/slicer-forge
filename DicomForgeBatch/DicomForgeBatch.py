@@ -107,6 +107,7 @@ class DicomForgeBatchLogic(ScriptedLoadableModuleLogic):
         output_format: str = "nrrd",
         load_into_scene: bool = True,
         progress_callback=None,
+        should_cancel=None,
     ) -> list:
         """Run the pipeline over every series found under ``input_dir``.
 
@@ -122,11 +123,17 @@ class DicomForgeBatchLogic(ScriptedLoadableModuleLogic):
             When True, each converted volume is loaded into the Slicer scene.
         progress_callback:
             Optional ``callable(done, total, message)`` for UI progress.
+        should_cancel:
+            Optional ``callable() -> bool`` checked before each series. When it
+            returns True the batch stops early and returns the series finished
+            so far. Kept as a plain callable so the logic stays Qt-free: the
+            widget owns the button and flag, this layer just asks.
 
         Returns
         -------
         list of dict
-            One serialisable audit record per series processed.
+            One serialisable audit record per series processed. Shorter than the
+            number of series found if the run was cancelled part-way.
         """
         if not self.is_dicom_forge_available():
             raise RuntimeError(
@@ -156,6 +163,8 @@ class DicomForgeBatchLogic(ScriptedLoadableModuleLogic):
         total = len(series_uids)
 
         for index, series_uid in enumerate(series_uids):
+            if should_cancel is not None and should_cancel():
+                break
             if progress_callback:
                 progress_callback(index, total, f"Processing series {index + 1}/{total}")
 
@@ -168,7 +177,8 @@ class DicomForgeBatchLogic(ScriptedLoadableModuleLogic):
                 volume_node.SetName(f"DICOMForge_{result.metadata.modality}_{index:03d}")
 
         if progress_callback:
-            progress_callback(total, total, "Done")
+            done = len(results)
+            progress_callback(done, total, "Done" if done == total else "Stopped")
         return results
 
 
@@ -182,6 +192,8 @@ class DicomForgeBatchWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         ScriptedLoadableModuleWidget.__init__(self, parent)
         VTKObservationMixin.__init__(self)
         self.logic = DicomForgeBatchLogic()
+        self._running = False
+        self._cancel_requested = False
 
     def setup(self):
         ScriptedLoadableModuleWidget.setup(self)
@@ -244,6 +256,11 @@ class DicomForgeBatchWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         self.runButton.enabled = False
         self.layout.addWidget(self.runButton)
 
+        self.cancelButton = qt.QPushButton("Cancel")
+        self.cancelButton.toolTip = "Stop the batch after the current series finishes."
+        self.cancelButton.enabled = False
+        self.layout.addWidget(self.cancelButton)
+
         self.progressBar = qt.QProgressBar()
         self.progressBar.visible = False
         self.layout.addWidget(self.progressBar)
@@ -258,6 +275,7 @@ class DicomForgeBatchWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         # --- Connections ---
         self.installButton.connect("clicked(bool)", self.onInstall)
         self.runButton.connect("clicked(bool)", self.onRun)
+        self.cancelButton.connect("clicked(bool)", self.onCancel)
         self.inputSelector.connect("currentPathChanged(QString)", self._update_run_state)
         self.outputSelector.connect("currentPathChanged(QString)", self._update_run_state)
 
@@ -270,12 +288,24 @@ class DicomForgeBatchWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         self.installButton.enabled = not available
         self._update_run_state()
 
-    def _update_run_state(self, *_):
-        self.runButton.enabled = (
+    def _can_run(self) -> bool:
+        return (
             self.logic.is_dicom_forge_available()
             and bool(self.inputSelector.currentPath)
             and bool(self.outputSelector.currentPath)
         )
+
+    def _update_run_state(self, *_):
+        # Don't fight the running state: while a batch is in progress the Run
+        # button stays disabled regardless of path edits.
+        if self._running:
+            return
+        self.runButton.enabled = self._can_run()
+
+    def _set_running(self, running: bool):
+        self._running = running
+        self.cancelButton.enabled = running
+        self.runButton.enabled = (not running) and self._can_run()
 
     def _on_progress(self, done, total, message):
         self.progressBar.maximum = max(total, 1)
@@ -290,7 +320,16 @@ class DicomForgeBatchWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
             slicer.util.showStatusMessage("dicom-forge installed.", 2000)
         self._refresh_status()
 
+    def onCancel(self):
+        # Set the flag the logic polls between series, and reflect it in the UI
+        # immediately. The actual stop happens when the current series finishes.
+        self._cancel_requested = True
+        self.cancelButton.enabled = False
+        slicer.util.showStatusMessage("Cancelling after the current series ...")
+
     def onRun(self):
+        self._cancel_requested = False
+        self._set_running(True)
         self.progressBar.visible = True
         self.resultsView.clear()
         try:
@@ -301,12 +340,16 @@ class DicomForgeBatchWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
                 output_format=self.formatCombo.currentText,
                 load_into_scene=self.loadCheck.checked,
                 progress_callback=self._on_progress,
+                should_cancel=lambda: self._cancel_requested,
             )
             self._render_results(results)
+            if self._cancel_requested:
+                self.resultsView.append("\nCancelled by user; remaining series were not processed.")
         except Exception as exc:  # noqa: BLE001 - surface any failure to the user
             slicer.util.errorDisplay(f"Batch import failed:\n{exc}")
             self.resultsView.append(traceback.format_exc())
         finally:
+            self._set_running(False)
             self.progressBar.visible = False
 
     def _render_results(self, results):
@@ -374,4 +417,14 @@ class DicomForgeBatchTest(ScriptedLoadableModuleTest):
             self.assertEqual(len(results), 1)
             self.assertTrue(results[0]["qc"]["geometry_consistent"])
             self.assertEqual(len(slicer.util.getNodesByClass("vtkMRMLScalarVolumeNode")), 1)
+
+            # Cancellation: a should_cancel that is already true must stop the
+            # batch before any series is processed.
+            cancelled = logic.process(
+                in_dir,
+                out_dir,
+                load_into_scene=False,
+                should_cancel=lambda: True,
+            )
+            self.assertEqual(cancelled, [])
         self.delayDisplay("DicomForgeBatch self-test passed")
