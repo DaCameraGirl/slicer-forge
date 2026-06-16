@@ -36,6 +36,9 @@ from slicer.util import VTKObservationMixin
 #: Minimum dicom-forge version this module is built against.
 DICOM_FORGE_MIN_VERSION = "0.1.0"
 
+#: Source for the dependency until dicom-forge is published to PyPI.
+DICOM_FORGE_REPO = "https://github.com/DaCameraGirl/dicom-forge"
+
 
 # ---------------------------------------------------------------------------
 # Module metadata
@@ -84,11 +87,16 @@ class DicomForgeBatchLogic(ScriptedLoadableModuleLogic):
 
         Uses ``slicer.util.pip_install`` so the package lands in the Slicer
         environment rather than the system Python. Safe to call repeatedly.
+
+        dicom-forge is not yet on PyPI, so we install from its public GitHub
+        repository. Switch ``DICOM_FORGE_PIP_SPEC`` to a plain ``dicom-forge``
+        requirement once the package is published.
         """
         if DicomForgeBatchLogic.is_dicom_forge_available():
             return
-        spec = "dicom-forge[convert]" if with_convert else "dicom-forge"
-        slicer.util.pip_install(f"{spec}>={DICOM_FORGE_MIN_VERSION}")
+        extra = "[convert]" if with_convert else ""
+        spec = f"dicom-forge{extra} @ git+{DICOM_FORGE_REPO}@main"
+        slicer.util.pip_install(spec)
 
     def process(
         self,

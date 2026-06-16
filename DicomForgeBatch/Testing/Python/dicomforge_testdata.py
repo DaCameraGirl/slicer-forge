@@ -64,12 +64,23 @@ def write_synthetic_series(
         ds.PatientBirthDate = "19700101"
         ds.InstitutionName = "General Hospital"
 
-        ds.save_as(
-            os.path.join(directory, f"slice_{index:03d}.dcm"),
-            enforce_file_format=True,
-        )
+        _save_dataset(ds, os.path.join(directory, f"slice_{index:03d}.dcm"))
 
     return directory
+
+
+def _save_dataset(ds: Dataset, path: str) -> None:
+    """Write a proper file-format DICOM across pydicom versions.
+
+    pydicom 3.0 renamed the flag that writes the 128-byte preamble + 'DICM'
+    marker from ``write_like_original=False`` to ``enforce_file_format=True``.
+    3D Slicer may bundle either generation, so we try the new API first and
+    fall back to the legacy one.
+    """
+    try:
+        ds.save_as(path, enforce_file_format=True)
+    except TypeError:
+        ds.save_as(path, write_like_original=False)
 
 
 # Allow ``python dicomforge_testdata.py <dir>`` for quick manual fixture creation.
