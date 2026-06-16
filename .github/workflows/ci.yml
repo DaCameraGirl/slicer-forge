@@ -22,7 +22,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: pip
       - name: Install linters
         run: pip install ruff
       - name: Ruff lint
@@ -42,7 +41,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: pip
       - name: Install runtime deps for the generator
         run: pip install pydicom numpy
       - name: Generate a synthetic series and re-read it
