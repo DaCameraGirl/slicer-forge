@@ -310,16 +310,27 @@ class DicomForgeBatchWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
             self.progressBar.visible = False
 
     def _render_results(self, results):
+        """Render the per-series audit records defensively.
+
+        The records come from dicom-forge's result schema. We read every field
+        through ``.get()`` with a fallback so a schema change (or a partial
+        record) degrades to a readable summary line instead of raising a
+        KeyError *after* the pipeline has already converted and loaded the
+        volumes -- which would show the user a failure for work that succeeded.
+        """
         lines = [f"Processed {len(results)} series:\n"]
         for r in results:
-            qc = r["qc"]
-            status = "PASS" if not qc["errors"] else "FAIL"
-            lines.append(
-                f"- {r['metadata']['modality']} "
-                f"({qc['num_slices']} slices) QC={status} "
-                f"-> {r['conversion']['output_path'] if r['conversion'] else 'n/a'}"
-            )
-            for w in qc["warnings"]:
+            qc = r.get("qc") or {}
+            metadata = r.get("metadata") or {}
+            conversion = r.get("conversion") or {}
+
+            modality = metadata.get("modality", "unknown")
+            num_slices = qc.get("num_slices", "?")
+            status = "FAIL" if qc.get("errors") else "PASS"
+            output_path = conversion.get("output_path", "n/a")
+
+            lines.append(f"- {modality} ({num_slices} slices) QC={status} -> {output_path}")
+            for w in qc.get("warnings") or []:
                 lines.append(f"    warning: {w}")
         self.resultsView.setPlainText("\n".join(lines))
 
