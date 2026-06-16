@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint & compile module Python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install linters
+        run: pip install ruff
+      - name: Ruff lint
+        run: ruff check .
+      - name: Ruff format check
+        run: ruff format --check .
+      - name: Byte-compile all module Python
+        # The Slicer runtime (slicer/qt/ctk/vtk) is unavailable in CI, so we
+        # compile rather than import: this catches syntax errors without Slicer.
+        run: python -m compileall -q DicomForgeBatch
+
+  testdata:
+    name: Validate synthetic-data generator
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime deps for the generator
+        run: pip install pydicom numpy
+      - name: Generate a synthetic series and re-read it
+        run: |
+          cd DicomForgeBatch/Testing/Python
+          python - <<'PY'
+          import tempfile, os, pydicom
+          from dicomforge_testdata import write_synthetic_series
+          d = write_synthetic_series(tempfile.mkdtemp(), num_slices=4)
+          files = [f for f in os.listdir(d) if f.endswith('.dcm')]
+          assert len(files) == 4, files
+          ds = pydicom.dcmread(os.path.join(d, sorted(files)[0]))
+          assert ds.Modality == "CT"
+          assert "PatientName" in ds  # PHI present so de-id has something to remove
+          print("OK: generated and re-read", len(files), "synthetic slices")
+          PY

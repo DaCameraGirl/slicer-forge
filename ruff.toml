@@ -1,0 +1,12 @@
+# Lint config for the Slicer module Python. The Slicer runtime (slicer/qt/ctk/vtk)
+# is not import-resolvable outside Slicer, but ruff does not resolve imports, so
+# static linting still adds value (style, unused names, bugs).
+line-length = 100
+target-version = "py39"
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "C4", "SIM"]
+ignore = [
+  "UP006",  # keep py3.9-compatible typing for Slicer's bundled interpreter
+  "UP035",
+]
