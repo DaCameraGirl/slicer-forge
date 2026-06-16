@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Build output
+build/
+*-build/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Never commit patient data or generated volumes
+*.dcm
+*.nii
+*.nii.gz
+*.nrrd
+*.seg.nrrd
+synthetic_series/
+scratch/
