@@ -28,8 +28,9 @@ this repo stays a small, focused front-end.
 
 ## What the module does
 
-1. **Install dependencies** — one button runs `pip_install('dicom-forge[convert]')`
-   into Slicer's own Python environment.
+1. **Install dependencies** — one button runs `pip_install('dicom-anvil[convert]')`
+   into Slicer's own Python environment (the engine ships on PyPI as `dicom-anvil`;
+   it still imports as `dicomforge`).
 2. **Pick folders** — a DICOM input folder and an output folder.
 3. **Choose options** — de-identification level (basic / moderate / strict) and output
    format (NRRD / NIfTI).

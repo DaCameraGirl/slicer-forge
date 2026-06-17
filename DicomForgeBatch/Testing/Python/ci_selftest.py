@@ -155,13 +155,13 @@ try:
 
     logic = DicomForgeBatch.DicomForgeBatchLogic()
     if not logic.is_dicom_forge_available():
-        log("Installing dicom-forge[convert] into Slicer's Python ...")
+        log("Installing dicom-anvil[convert] into Slicer's Python ...")
         logic.ensure_dependencies(with_convert=True)
     assert logic.is_dicom_forge_available(), "dicom-forge failed to install"
 
     import dicomforge
 
-    log(f"dicom-forge: {dicomforge.__version__}")
+    log(f"dicom-anvil (import dicomforge): {dicomforge.__version__}")
 
     failures = _run_checks(logic)
     if failures:
