@@ -1,0 +1,9 @@
+version: 2
+updates:
+  # Keep GitHub Actions pinned versions current. There is no committed Python
+  # dependency manifest here (the engine is pip-installed into Slicer's Python at
+  # runtime), so only the github-actions ecosystem is tracked.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
