@@ -33,10 +33,12 @@ from slicer.ScriptedLoadableModule import (
 )
 from slicer.util import VTKObservationMixin
 
-#: Minimum dicom-forge version this module is built against.
+#: Minimum dicom-forge version (PyPI distribution ``dicom-anvil``) this module
+#: is built against; used as the lower bound of the install requirement.
 DICOM_FORGE_MIN_VERSION = "0.1.0"
 
-#: Source for the dependency until dicom-forge is published to PyPI.
+#: Upstream source repository, kept for links and provenance. The package now
+#: ships on PyPI as ``dicom-anvil``, so we no longer install from git.
 DICOM_FORGE_REPO = "https://github.com/DaCameraGirl/dicom-forge"
 
 
@@ -88,20 +90,20 @@ class DicomForgeBatchLogic(ScriptedLoadableModuleLogic):
         Uses ``slicer.util.pip_install`` so the package lands in the Slicer
         environment rather than the system Python. Safe to call repeatedly.
 
-        The engine publishes on PyPI as ``dicom-anvil`` (the name ``dicom-forge``
-        was already taken; the import package is still ``dicomforge``). Until the
-        first PyPI release we install from the public GitHub repository; switch
-        this spec to a plain ``dicom-anvil`` requirement once it is published.
+        The engine ships on PyPI as ``dicom-anvil`` (the name ``dicom-forge`` was
+        already taken; the import package is still ``dicomforge``). We install a
+        pinned release requirement (``>=`` the minimum version this module targets)
+        so installs are reproducible rather than tracking a moving git branch.
 
-        The spec must contain **no spaces**: ``slicer.util.pip_install`` splits
-        its argument on whitespace and passes each token to pip separately, so
-        the PEP 508 ``name @ url`` form would arrive as three broken arguments.
-        We use the equivalent no-space form ``name[extras]@url`` instead.
+        The spec contains no spaces, which ``slicer.util.pip_install`` requires:
+        it splits its argument on whitespace and passes each token to pip
+        separately. A PEP 508 requirement like ``dicom-anvil[convert]>=0.1.0``
+        is already whitespace-free, so it passes through as a single argument.
         """
         if DicomForgeBatchLogic.is_dicom_forge_available():
             return
         extra = "[convert]" if with_convert else ""
-        spec = f"dicom-anvil{extra}@git+{DICOM_FORGE_REPO}@main"
+        spec = f"dicom-anvil{extra}>={DICOM_FORGE_MIN_VERSION}"
         slicer.util.pip_install(spec)
 
     def process(
