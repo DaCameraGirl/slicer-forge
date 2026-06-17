@@ -89,13 +89,18 @@ class DicomForgeBatchLogic(ScriptedLoadableModuleLogic):
         environment rather than the system Python. Safe to call repeatedly.
 
         dicom-forge is not yet on PyPI, so we install from its public GitHub
-        repository. Switch ``DICOM_FORGE_PIP_SPEC`` to a plain ``dicom-forge``
-        requirement once the package is published.
+        repository. Switch this spec to a plain ``dicom-forge`` requirement
+        once the package is published.
+
+        The spec must contain **no spaces**: ``slicer.util.pip_install`` splits
+        its argument on whitespace and passes each token to pip separately, so
+        the PEP 508 ``name @ url`` form would arrive as three broken arguments.
+        We use the equivalent no-space form ``name[extras]@url`` instead.
         """
         if DicomForgeBatchLogic.is_dicom_forge_available():
             return
         extra = "[convert]" if with_convert else ""
-        spec = f"dicom-forge{extra} @ git+{DICOM_FORGE_REPO}@main"
+        spec = f"dicom-forge{extra}@git+{DICOM_FORGE_REPO}@main"
         slicer.util.pip_install(spec)
 
     def process(
