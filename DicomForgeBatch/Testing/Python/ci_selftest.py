@@ -7,8 +7,9 @@ Runs inside a real (headless) 3D Slicer:
 Adapted from ``scratch/run_live_test.py`` (which passed against Slicer 5.10).
 It installs dicom-forge into Slicer's own Python via the module's own
 ``ensure_dependencies()`` -- so CI exercises the exact install path users hit --
-generates a synthetic DICOM series, runs the pipeline end to end, asserts a
-volume reached the MRML scene, and checks the cancellation path.
+then runs a battery of labelled checks over the pipeline: single CT series,
+CT+MR multi-series in one folder, NIfTI output, every de-identification level,
+the cancellation path, and the empty/junk-folder failure paths.
 
 The Slicer launcher does not reliably propagate stdout or the process exit code
 on every platform, so the verdict is also written to ``CI_RESULT_FILE`` (or a
@@ -39,6 +40,113 @@ def log(msg):
     _log.append(str(msg))
 
 
+def _volume_count():
+    return len(slicer.util.getNodesByClass("vtkMRMLScalarVolumeNode"))
+
+
+def _fresh_io():
+    tmp = tempfile.mkdtemp()
+    return os.path.join(tmp, "in"), os.path.join(tmp, "out")
+
+
+# --- checks ------------------------------------------------------------------
+# Each check raises on failure; the runner clears the scene before each one.
+_CHECKS = []
+
+
+def check(name):
+    def _register(fn):
+        _CHECKS.append((name, fn))
+        return fn
+
+    return _register
+
+
+def _run_checks(logic):
+    from dicomforge_testdata import write_multiple_series, write_synthetic_series
+
+    @check("single CT series -> NRRD, loaded into scene")
+    def _():
+        in_dir, out_dir = _fresh_io()
+        write_synthetic_series(in_dir, num_slices=6, modality="CT")
+        results = logic.process(in_dir, out_dir, output_format="nrrd", load_into_scene=True)
+        assert len(results) == 1, f"expected 1 series, got {len(results)}"
+        assert results[0]["qc"]["geometry_consistent"], results[0]["qc"]
+        assert _volume_count() == 1, f"expected 1 volume node, got {_volume_count()}"
+
+    @check("CT + MR multi-series in one folder -> two volumes")
+    def _():
+        in_dir, out_dir = _fresh_io()
+        write_multiple_series(in_dir, modalities=["CT", "MR"], num_slices=4)
+        results = logic.process(in_dir, out_dir, load_into_scene=True)
+        assert len(results) == 2, f"expected 2 series, got {len(results)}"
+        modalities = sorted(r["metadata"]["modality"] for r in results)
+        assert modalities == ["CT", "MR"], modalities
+        assert _volume_count() == 2, f"expected 2 volume nodes, got {_volume_count()}"
+
+    @check("NIfTI output format")
+    def _():
+        in_dir, out_dir = _fresh_io()
+        write_synthetic_series(in_dir, num_slices=4, modality="CT")
+        results = logic.process(in_dir, out_dir, output_format="nifti", load_into_scene=True)
+        assert len(results) == 1, f"expected 1 series, got {len(results)}"
+        out_path = results[0]["conversion"]["output_path"]
+        assert os.path.exists(out_path), f"converted file missing: {out_path}"
+        assert _volume_count() == 1, f"expected 1 volume node, got {_volume_count()}"
+
+    @check("de-identification levels: basic / moderate / strict")
+    def _():
+        for level in ("basic", "moderate", "strict"):
+            in_dir, out_dir = _fresh_io()
+            write_synthetic_series(in_dir, num_slices=3, modality="CT")
+            results = logic.process(in_dir, out_dir, deid_level=level, load_into_scene=False)
+            assert len(results) == 1, f"{level}: expected 1 series, got {len(results)}"
+            assert not results[0]["qc"]["errors"], f"{level}: {results[0]['qc']['errors']}"
+
+    @check("cancellation: already-true should_cancel -> zero series")
+    def _():
+        in_dir, out_dir = _fresh_io()
+        write_synthetic_series(in_dir, num_slices=3, modality="CT")
+        cancelled = logic.process(
+            in_dir, out_dir, load_into_scene=False, should_cancel=lambda: True
+        )
+        assert cancelled == [], f"expected no series when cancelled, got {len(cancelled)}"
+
+    @check("empty folder raises a clear error")
+    def _():
+        in_dir, out_dir = _fresh_io()
+        os.makedirs(in_dir, exist_ok=True)
+        try:
+            logic.process(in_dir, out_dir, load_into_scene=False)
+        except RuntimeError:
+            return
+        raise AssertionError("expected RuntimeError for an empty input folder")
+
+    @check("folder of non-DICOM junk raises, does not crash oddly")
+    def _():
+        in_dir, out_dir = _fresh_io()
+        os.makedirs(in_dir, exist_ok=True)
+        with open(os.path.join(in_dir, "notes.txt"), "w", encoding="utf-8") as fh:
+            fh.write("this is not a DICOM file")
+        try:
+            logic.process(in_dir, out_dir, load_into_scene=False)
+        except Exception:
+            return
+        raise AssertionError("expected an error for a folder with no readable DICOM")
+
+    failures = []
+    for name, fn in _CHECKS:
+        slicer.mrmlScene.Clear()
+        try:
+            fn()
+            log(f"  PASS  {name}")
+        except Exception:
+            failures.append(name)
+            log(f"  FAIL  {name}")
+            log(traceback.format_exc())
+    return failures
+
+
 status = 1
 try:
     log(f"Slicer {slicer.app.applicationVersion} | Python {sys.version.split()[0]}")
@@ -55,31 +163,15 @@ try:
 
     log(f"dicom-forge: {dicomforge.__version__}")
 
-    from dicomforge_testdata import write_synthetic_series
-
-    slicer.mrmlScene.Clear()
-    tmp = tempfile.mkdtemp()
-    in_dir = os.path.join(tmp, "in")
-    out_dir = os.path.join(tmp, "out")
-    write_synthetic_series(in_dir, num_slices=6)
-    log(f"Synthetic 6-slice CT series written to {in_dir}")
-
-    results = logic.process(
-        in_dir, out_dir, deid_level="moderate", output_format="nrrd", load_into_scene=True
-    )
-    vols = slicer.util.getNodesByClass("vtkMRMLScalarVolumeNode")
-    assert len(results) == 1, f"expected 1 series, got {len(results)}"
-    assert results[0]["qc"]["geometry_consistent"], results[0]["qc"]
-    assert len(vols) == 1, f"expected 1 volume node in scene, got {len(vols)}"
-
-    # Cancellation path: an already-true should_cancel must yield zero series.
-    cancelled = logic.process(in_dir, out_dir, load_into_scene=False, should_cancel=lambda: True)
-    assert cancelled == [], f"expected no series when cancelled, got {len(cancelled)}"
-
-    log("CI SELF-TEST PASSED (pipeline end-to-end + cancellation)")
-    status = 0
+    failures = _run_checks(logic)
+    if failures:
+        log(f"CI SELF-TEST FAILED ({len(failures)} of {len(_CHECKS)} checks failed)")
+        status = 2
+    else:
+        log(f"CI SELF-TEST PASSED ({len(_CHECKS)} checks)")
+        status = 0
 except Exception:
-    log("CI SELF-TEST FAILED")
+    log("CI SELF-TEST FAILED (setup error)")
     log(traceback.format_exc())
     status = 2
 finally:
