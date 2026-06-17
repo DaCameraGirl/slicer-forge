@@ -34,7 +34,11 @@ this repo stays a small, focused front-end.
 3. **Choose options** — de-identification level (basic / moderate / strict) and output
    format (NRRD / NIfTI).
 4. **Run** — every series is de-identified → QC'd → converted → loaded into the scene,
-   with a per-series PASS/FAIL summary and warnings.
+   with a per-series PASS/FAIL summary and warnings. Long runs stay responsive and can
+   be cancelled.
+
+📖 **New to the module?** Follow the step-by-step [usage tutorial](docs/tutorial.md).
+See the [changelog](CHANGELOG.md) for what has changed.
 
 ## Installation
 
@@ -73,8 +77,14 @@ The self-test runs **inside** Slicer (it needs the `slicer` runtime):
 > Slicer → **Developer Tools → Self Tests** → run *DicomForgeBatch*, or from the
 > Python console: `slicer.util.selfTest('DicomForgeBatch')`.
 
-CI in this repo lint-checks and byte-compiles the module Python on every push
-(the GUI/runtime parts can only execute inside Slicer).
+CI runs on every push at two levels:
+
+- a **fast lane** lint-checks and byte-compiles the module (the GUI/runtime parts can't
+  be imported without Slicer, so it compiles rather than imports), and
+- a **headless-Slicer lane** that downloads real 3D Slicer and runs the full pipeline
+  end-to-end — de-id → QC → convert → load — across CT and MR, multiple series in one
+  folder, both output formats, every de-identification level, and the empty/non-DICOM
+  failure paths.
 
 > ⚠️ De-identification is best-effort risk reduction, not a compliance guarantee.
 > See [`dicom-forge`'s SECURITY policy](https://github.com/DaCameraGirl/dicom-forge/blob/main/SECURITY.md).
