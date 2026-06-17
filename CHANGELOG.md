@@ -12,6 +12,10 @@ All notable changes to this project are documented here. The format is based on
   are reproducible and need no build toolchain (#18).
 
 ### Added
+- Slicer Extensions Index **catalog entry** (`extensions-index/SlicerForge.json`,
+  validated against the v1.0.1 schema) and a submission guide, so listing the
+  extension is a copy-paste away. The outward PR to `Slicer/ExtensionsIndex` is
+  intentionally held pending go-ahead (#20).
 - Initial **DICOM Forge Batch** Slicer module (Informatics category): batch
   de-identify → QC → convert → load, driven by the `dicom-forge` pipeline, with
   a one-click dependency installer and a synthetic-DICOM self-test (#2).
