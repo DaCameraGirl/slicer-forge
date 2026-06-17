@@ -88,9 +88,10 @@ class DicomForgeBatchLogic(ScriptedLoadableModuleLogic):
         Uses ``slicer.util.pip_install`` so the package lands in the Slicer
         environment rather than the system Python. Safe to call repeatedly.
 
-        dicom-forge is not yet on PyPI, so we install from its public GitHub
-        repository. Switch this spec to a plain ``dicom-forge`` requirement
-        once the package is published.
+        The engine publishes on PyPI as ``dicom-anvil`` (the name ``dicom-forge``
+        was already taken; the import package is still ``dicomforge``). Until the
+        first PyPI release we install from the public GitHub repository; switch
+        this spec to a plain ``dicom-anvil`` requirement once it is published.
 
         The spec must contain **no spaces**: ``slicer.util.pip_install`` splits
         its argument on whitespace and passes each token to pip separately, so
@@ -100,7 +101,7 @@ class DicomForgeBatchLogic(ScriptedLoadableModuleLogic):
         if DicomForgeBatchLogic.is_dicom_forge_available():
             return
         extra = "[convert]" if with_convert else ""
-        spec = f"dicom-forge{extra}@git+{DICOM_FORGE_REPO}@main"
+        spec = f"dicom-anvil{extra}@git+{DICOM_FORGE_REPO}@main"
         slicer.util.pip_install(spec)
 
     def process(
@@ -144,7 +145,7 @@ class DicomForgeBatchLogic(ScriptedLoadableModuleLogic):
             raise RuntimeError(
                 "dicom-forge is not installed. Click 'Install / update dicom-forge' "
                 "in the module panel, or run "
-                "slicer.util.pip_install('dicom-forge[convert]')."
+                "slicer.util.pip_install('dicom-anvil[convert]')."
             )
 
         from dicomforge import PipelineConfig
@@ -214,7 +215,7 @@ class DicomForgeBatchWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
 
         self.installButton = qt.QPushButton("Install / update dicom-forge")
         self.installButton.toolTip = (
-            "Installs dicom-forge[convert] into Slicer's Python environment."
+            "Installs dicom-anvil[convert] into Slicer's Python environment."
         )
         dep_form.addRow(self.installButton)
 
