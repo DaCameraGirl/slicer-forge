@@ -1,0 +1,64 @@
+name: Slicer self-test
+
+# Runs the real end-to-end pipeline inside a headless 3D Slicer on every push.
+# The lint workflow (ci.yml) can only byte-compile the module because the Slicer
+# runtime is unavailable there; this job downloads Slicer and actually runs it.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: slicer-selftest-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  selftest:
+    name: Headless Slicer end-to-end
+    # Slicer 5.10 packages target Ubuntu 22.04; pin it rather than ubuntu-latest.
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install headless Slicer runtime libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            xvfb \
+            libgl1-mesa-glx libglu1-mesa libpulse-mainloop-glib0 libnss3 \
+            libxrender1 libxtst6 libxcursor1 libxcomposite1 libxdamage1 \
+            libxrandr2 libxi6 libsm6 libfontconfig1 libdbus-1-3 \
+            libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+            libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xkb1 \
+            libxcb-shape0
+
+      - name: Download 3D Slicer (stable, Linux)
+        run: |
+          curl -fL --retry 3 --max-time 600 -o slicer.tar.gz \
+            "https://download.slicer.org/download?os=linux&stable"
+          mkdir -p slicer
+          tar -xzf slicer.tar.gz -C slicer --strip-components=1
+          echo "SLICER=$PWD/slicer/Slicer" >> "$GITHUB_ENV"
+          "$PWD/slicer/Slicer" --version || true
+
+      - name: Run end-to-end self-test
+        env:
+          CI_RESULT_FILE: ${{ github.workspace }}/ci_result.txt
+        run: |
+          # The Slicer launcher detaches the app, so its own exit code is not
+          # reliable; the verdict is the EXIT_STATUS line in the result file.
+          xvfb-run -a "$SLICER" --no-splash --no-main-window --disable-cli-modules \
+            --python-script "$GITHUB_WORKSPACE/DicomForgeBatch/Testing/Python/ci_selftest.py" || true
+          echo "----- self-test result -----"
+          if [ ! -f "$CI_RESULT_FILE" ]; then
+            echo "No result file produced -- Slicer likely failed to start."
+            exit 1
+          fi
+          cat "$CI_RESULT_FILE"
+          grep -q "EXIT_STATUS=0" "$CI_RESULT_FILE"
