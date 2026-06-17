@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Changed
+- Dependency install now pins the engine to its **PyPI release**
+  (`dicom-anvil[convert]>=0.1.0`) instead of `git+https://...@main`, so installs
+  are reproducible and need no build toolchain (#18).
+
 ### Added
 - Initial **DICOM Forge Batch** Slicer module (Informatics category): batch
   de-identify → QC → convert → load, driven by the `dicom-forge` pipeline, with
