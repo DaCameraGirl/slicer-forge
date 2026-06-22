@@ -5,9 +5,9 @@
 # slicer-forge
 
 <p align="center">
-  <a href="README.md"><img src="https://img.shields.io/badge/🇺🇸_English-a78bfa?style=for-the-badge" alt="English"/></a>
+  <a href="README.md"><img src="https://img.shields.io/badge/🇺🇸_English-1e293b?style=for-the-badge" alt="English"/></a>
     <a href="README.es.md"><img src="https://img.shields.io/badge/🇪🇸_Español-1e293b?style=for-the-badge" alt="Español"/></a>
-    <a href="README.fr.md"><img src="https://img.shields.io/badge/🇫🇷_Français-1e293b?style=for-the-badge" alt="Français"/></a>
+    <a href="README.fr.md"><img src="https://img.shields.io/badge/🇫🇷_Français-a78bfa?style=for-the-badge" alt="Français"/></a>
     <a href="README.de.md"><img src="https://img.shields.io/badge/🇩🇪_Deutsch-1e293b?style=for-the-badge" alt="Deutsch"/></a>
     <a href="README.pt-BR.md"><img src="https://img.shields.io/badge/🇧🇷_Português-1e293b?style=for-the-badge" alt="Português"/></a>
 </p>
@@ -33,15 +33,15 @@
   <img src="https://img.shields.io/badge/3D%20Slicer-extension-a78bfa.svg" alt="Slicer extension"/>
 </p>
 
-**A [3D Slicer](https://www.slicer.org/) extension that batch-imports DICOM through the [`dicom-forge`](https://github.com/DaCameraGirl/dicom-forge) pipeline.**
+**Extension [3D Slicer](https://www.slicer.org/) d'import DICOM par lots via [`dicom-forge`](https://github.com/DaCameraGirl/dicom-forge).**
 
-`slicer-forge` adds a **DICOM Forge Batch** module to Slicer. Point it at a folder of DICOM, and it de-identifies each series (removes patient names and IDs from headers), runs quality control, converts to NRRD, and loads the volumes straight into your Slicer scene — driven entirely by the headless, independently tested `dicom-forge` library.
+Ajoute **DICOM Forge Batch** a Slicer : de-identification (noms/IDs retires), QC, conversion NRRD, chargement des volumes.
 
 <p align="center">
   <img src="DicomForgeBatch/Resources/Icons/DicomForgeBatch.png" width="96" alt="DICOM Forge Batch icon">
 </p>
 
-## The two-repo design
+## Architecture deux depots
 
 | Repo | Role | Tested |
 |------|------|--------|
@@ -50,7 +50,7 @@
 
 This mirrors how Slicer itself is built (ITK/VTK do the work; the GUI is a shell on top). All the heavy logic lives in `dicom-forge`, so it is fully testable on its own; this repo stays a small, focused front-end.
 
-## What the module does
+## Fonctions du module
 
 1. **Install dependencies** — one button runs `pip_install('dicom-anvil[convert]')` into Slicer's own Python environment (the engine ships on PyPI as `dicom-anvil`; it still imports as `dicomforge`).
 2. **Pick folders** — a DICOM input folder and an output folder.
@@ -82,7 +82,7 @@ Slicer scripted modules use a fixed four-class shape — this one lives in [`Dic
 - `DicomForgeBatchLogic` — Qt-free logic wrapping `dicom-forge` (reusable from the Python console).
 - `DicomForgeBatchTest` — a self-test that generates synthetic DICOM and runs the whole pipeline inside Slicer.
 
-## Testing
+## Tests
 
 The self-test runs **inside** Slicer (it needs the `slicer` runtime):
 
@@ -95,6 +95,6 @@ CI runs on every push at two levels:
 
 > ⚠️ De-identification is best-effort risk reduction, not a compliance guarantee. See [`dicom-forge`'s SECURITY policy](https://github.com/DaCameraGirl/dicom-forge/blob/main/SECURITY.md).
 
-## License
+## Licence
 
 [Apache-2.0](LICENSE) © Angela Hudson

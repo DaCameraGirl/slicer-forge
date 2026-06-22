@@ -5,11 +5,11 @@
 # slicer-forge
 
 <p align="center">
-  <a href="README.md"><img src="https://img.shields.io/badge/🇺🇸_English-a78bfa?style=for-the-badge" alt="English"/></a>
+  <a href="README.md"><img src="https://img.shields.io/badge/🇺🇸_English-1e293b?style=for-the-badge" alt="English"/></a>
     <a href="README.es.md"><img src="https://img.shields.io/badge/🇪🇸_Español-1e293b?style=for-the-badge" alt="Español"/></a>
     <a href="README.fr.md"><img src="https://img.shields.io/badge/🇫🇷_Français-1e293b?style=for-the-badge" alt="Français"/></a>
     <a href="README.de.md"><img src="https://img.shields.io/badge/🇩🇪_Deutsch-1e293b?style=for-the-badge" alt="Deutsch"/></a>
-    <a href="README.pt-BR.md"><img src="https://img.shields.io/badge/🇧🇷_Português-1e293b?style=for-the-badge" alt="Português"/></a>
+    <a href="README.pt-BR.md"><img src="https://img.shields.io/badge/🇧🇷_Português-a78bfa?style=for-the-badge" alt="Português"/></a>
 </p>
 <p align="center">
   <a href="README.zh-CN.md"><img src="https://img.shields.io/badge/🇨🇳_中文-1e293b?style=for-the-badge" alt="中文"/></a>
@@ -33,9 +33,9 @@
   <img src="https://img.shields.io/badge/3D%20Slicer-extension-a78bfa.svg" alt="Slicer extension"/>
 </p>
 
-**A [3D Slicer](https://www.slicer.org/) extension that batch-imports DICOM through the [`dicom-forge`](https://github.com/DaCameraGirl/dicom-forge) pipeline.**
+**Extensao do [3D Slicer](https://www.slicer.org/) para importacao em lote via [`dicom-forge`](https://github.com/DaCameraGirl/dicom-forge).**
 
-`slicer-forge` adds a **DICOM Forge Batch** module to Slicer. Point it at a folder of DICOM, and it de-identifies each series (removes patient names and IDs from headers), runs quality control, converts to NRRD, and loads the volumes straight into your Slicer scene — driven entirely by the headless, independently tested `dicom-forge` library.
+Adiciona **DICOM Forge Batch**: desidentifica, QC, converte para NRRD e carrega volumes na cena.
 
 <p align="center">
   <img src="DicomForgeBatch/Resources/Icons/DicomForgeBatch.png" width="96" alt="DICOM Forge Batch icon">
