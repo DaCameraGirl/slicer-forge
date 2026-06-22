@@ -33,11 +33,13 @@ $pts = @(
     [System.Drawing.Point]::new(68, 168)
 )
 $g.FillPolygon($white, $pts)
-$g.FillPolygon([System.Drawing.Color]::FromArgb(56, 189, 248), @(
+$cyan = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(56, 189, 248))
+$g.FillPolygon($cyan, @(
     [System.Drawing.Point]::new(128, 96),
     [System.Drawing.Point]::new(160, 152),
     [System.Drawing.Point]::new(96, 152)
 ))
+$cyan.Dispose()
 
 $font = New-Object System.Drawing.Font("Segoe UI", 24, [System.Drawing.FontStyle]::Bold)
 $fmt = New-Object System.Drawing.StringFormat
