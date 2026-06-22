@@ -5,7 +5,7 @@
 # slicer-forge
 
 <p align="center">
-  <a href="README.md"><img src="https://img.shields.io/badge/🇺🇸_English-a78bfa?style=for-the-badge" alt="English"/></a>
+  <a href="README.md"><img src="https://img.shields.io/badge/🇺🇸_English-1e293b?style=for-the-badge" alt="English"/></a>
     <a href="README.es.md"><img src="https://img.shields.io/badge/🇪🇸_Español-1e293b?style=for-the-badge" alt="Español"/></a>
     <a href="README.fr.md"><img src="https://img.shields.io/badge/🇫🇷_Français-1e293b?style=for-the-badge" alt="Français"/></a>
     <a href="README.de.md"><img src="https://img.shields.io/badge/🇩🇪_Deutsch-1e293b?style=for-the-badge" alt="Deutsch"/></a>
@@ -13,7 +13,7 @@
 </p>
 <p align="center">
   <a href="README.zh-CN.md"><img src="https://img.shields.io/badge/🇨🇳_中文-1e293b?style=for-the-badge" alt="中文"/></a>
-    <a href="README.ja.md"><img src="https://img.shields.io/badge/🇯🇵_日本語-1e293b?style=for-the-badge" alt="日本語"/></a>
+    <a href="README.ja.md"><img src="https://img.shields.io/badge/🇯🇵_日本語-a78bfa?style=for-the-badge" alt="日本語"/></a>
     <a href="README.ko.md"><img src="https://img.shields.io/badge/🇰🇷_한국어-1e293b?style=for-the-badge" alt="한국어"/></a>
     <a href="README.it.md"><img src="https://img.shields.io/badge/🇮🇹_Italiano-1e293b?style=for-the-badge" alt="Italiano"/></a>
     <a href="README.ar.md"><img src="https://img.shields.io/badge/🇸🇦_العربية-1e293b?style=for-the-badge" alt="العربية"/></a>
@@ -33,9 +33,9 @@
   <img src="https://img.shields.io/badge/3D%20Slicer-extension-a78bfa.svg" alt="Slicer extension"/>
 </p>
 
-**A [3D Slicer](https://www.slicer.org/) extension that batch-imports DICOM through the [`dicom-forge`](https://github.com/DaCameraGirl/dicom-forge) pipeline.**
+**[`dicom-forge`](https://github.com/DaCameraGirl/dicom-forge) 経由で DICOM を一括取り込みする [3D Slicer](https://www.slicer.org/) 拡張。**
 
-`slicer-forge` adds a **DICOM Forge Batch** module to Slicer. Point it at a folder of DICOM, and it de-identifies each series (removes patient names and IDs from headers), runs quality control, converts to NRRD, and loads the volumes straight into your Slicer scene — driven entirely by the headless, independently tested `dicom-forge` library.
+**DICOM Forge Batch** を追加：匿名化、QC、NRRD 変換、シーンへ読み込み。
 
 <p align="center">
   <img src="DicomForgeBatch/Resources/Icons/DicomForgeBatch.png" width="96" alt="DICOM Forge Batch icon">
