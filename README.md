@@ -72,7 +72,7 @@
 </p>
 
 <p align="center"><img src="docs/readme-divider.svg" width="720" alt="" /></p>
-<p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=070b14&height=50&section=header&text=The%20two-repo%20design&fontSize=22&fontColor=e6edf3" width="720" alt="The two-repo design" /></p>
+<p align="center"><img src="https://capsule-render.vercel.app/api?type=waving&color=0:070b14,100:12102a&height=50&section=header&text=The%20two-repo%20design&fontSize=22&fontColor=e6edf3&animation=twinkling" width="720" alt="The two-repo design" /></p>
 
 
 | Repo | Role | Tested |
@@ -83,7 +83,7 @@
 This mirrors how Slicer itself is built (ITK/VTK do the work; the GUI is a shell on top). All the heavy logic lives in `dicom-forge`, so it is fully testable on its own; this repo stays a small, focused front-end.
 
 <p align="center"><img src="docs/readme-divider.svg" width="720" alt="" /></p>
-<p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=070b14&height=50&section=header&text=What%20the%20module%20does&fontSize=22&fontColor=e6edf3" width="720" alt="What the module does" /></p>
+<p align="center"><img src="https://capsule-render.vercel.app/api?type=waving&color=0:070b14,100:12102a&height=50&section=header&text=What%20the%20module%20does&fontSize=22&fontColor=e6edf3&animation=twinkling" width="720" alt="What the module does" /></p>
 
 
 1. **Install dependencies** — one button runs `pip_install('dicom-anvil[convert]')` into Slicer's own Python environment (the engine ships on PyPI as `dicom-anvil`; it still imports as `dicomforge`).
@@ -94,7 +94,7 @@ This mirrors how Slicer itself is built (ITK/VTK do the work; the GUI is a shell
 📖 **New to the module?** Follow the step-by-step [usage tutorial](docs/tutorial.md). See the [changelog](CHANGELOG.md) for what has changed.
 
 <p align="center"><img src="docs/readme-divider.svg" width="720" alt="" /></p>
-<p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=070b14&height=50&section=header&text=Installation&fontSize=22&fontColor=e6edf3" width="720" alt="Installation" /></p>
+<p align="center"><img src="https://capsule-render.vercel.app/api?type=waving&color=0:070b14,100:12102a&height=50&section=header&text=Installation&fontSize=22&fontColor=e6edf3&animation=twinkling" width="720" alt="Installation" /></p>
 
 
 ### From source (developer install)
@@ -110,7 +110,7 @@ In Slicer: **Edit → Application Settings → Modules → Additional module pat
 The repo is laid out for the standard Slicer extension build (`CMakeLists.txt` + `slicerMacroBuildScriptedModule`) so it can be built against a Slicer build tree and submitted to the [Slicer Extensions Index](https://github.com/Slicer/ExtensionsIndex).
 
 <p align="center"><img src="docs/readme-divider.svg" width="720" alt="" /></p>
-<p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=070b14&height=50&section=header&text=Module%20anatomy&fontSize=22&fontColor=e6edf3" width="720" alt="Module anatomy" /></p>
+<p align="center"><img src="https://capsule-render.vercel.app/api?type=waving&color=0:070b14,100:12102a&height=50&section=header&text=Module%20anatomy&fontSize=22&fontColor=e6edf3&animation=twinkling" width="720" alt="Module anatomy" /></p>
 
 
 Slicer scripted modules use a fixed four-class shape — this one lives in [`DicomForgeBatch/DicomForgeBatch.py`](DicomForgeBatch/DicomForgeBatch.py):
@@ -121,7 +121,7 @@ Slicer scripted modules use a fixed four-class shape — this one lives in [`Dic
 - `DicomForgeBatchTest` — a self-test that generates synthetic DICOM and runs the whole pipeline inside Slicer.
 
 <p align="center"><img src="docs/readme-divider.svg" width="720" alt="" /></p>
-<p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=070b14&height=50&section=header&text=Testing&fontSize=22&fontColor=e6edf3" width="720" alt="Testing" /></p>
+<p align="center"><img src="https://capsule-render.vercel.app/api?type=waving&color=0:070b14,100:12102a&height=50&section=header&text=Testing&fontSize=22&fontColor=e6edf3&animation=twinkling" width="720" alt="Testing" /></p>
 
 
 The self-test runs **inside** Slicer (it needs the `slicer` runtime):
@@ -136,7 +136,7 @@ CI runs on every push at two levels:
 > ⚠️ De-identification is best-effort risk reduction, not a compliance guarantee. See [`dicom-forge`'s SECURITY policy](https://github.com/DaCameraGirl/dicom-forge/blob/main/SECURITY.md).
 
 <p align="center"><img src="docs/readme-divider.svg" width="720" alt="" /></p>
-<p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=070b14&height=50&section=header&text=License&fontSize=22&fontColor=e6edf3" width="720" alt="License" /></p>
+<p align="center"><img src="https://capsule-render.vercel.app/api?type=waving&color=0:070b14,100:12102a&height=50&section=header&text=License&fontSize=22&fontColor=e6edf3&animation=twinkling" width="720" alt="License" /></p>
 
 
 [Apache-2.0](LICENSE) © Angela Hudson
