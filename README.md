@@ -1,9 +1,39 @@
 <p align="center">
-  <img src="docs/assets/readme-hero.svg" alt="Slicer Forge" width="100%"/>
+  <img src="docs/readme-banner.svg" alt="Slicer Forge — 3D Slicer extension: batch ingest, de-identify, QC, and import DICOM via the dicom-forge pipeline." width="720" />
 </p>
 
-# slicer-forge
+<p align="center">
+  <strong>3D Slicer extension: batch ingest, de-identify, QC, and import DICOM via the dicom-forge pipeline.</strong>
+</p>
 
+<p align="center">
+  <a href="https://dacameragirl.github.io/slicer-forge/"><img src="https://img.shields.io/badge/Live-GitHub%20Pages-33d69f?style=for-the-badge&logo=github&logoColor=white" alt="Live demo" /></a>
+  <a href="https://github.com/DaCameraGirl/slicer-forge"><img src="https://img.shields.io/badge/Code-GitHub-58a6ff?style=for-the-badge&logo=github&logoColor=white" alt="Source code" /></a>
+  <a href="https://github.com/DaCameraGirl/dicom-forge"><img src="https://img.shields.io/badge/dicom-forge-33d69f?style=for-the-badge" alt="dicom-forge" /></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/deploy-GitHub Pages-000000?style=flat-square&logo=github&logoColor=white" alt="deploy-GitHub Pages" />
+  <img src="https://img.shields.io/badge/medical-imaging-4fd6e0?style=flat-square" alt="medical-imaging" />
+</p>
+
+### Languages
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-89%25-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python" />
+  <img src="https://img.shields.io/badge/PowerShell-8%25-5391FE?style=flat-square&logo=github&logoColor=white" alt="PowerShell" />
+</p>
+
+### Stack
+
+<p align="center">
+  <img src="https://img.shields.io/badge/3D Slicer-ext-4fd6e0?style=flat-square" alt="3D Slicer-ext" />
+  <img src="https://img.shields.io/badge/dicom-forge-pipeline-33d69f?style=flat-square" alt="dicom-forge-pipeline" />
+</p>
+
+<p align="center">
+  Built by <strong>Angela Hudson</strong> · <a href="https://github.com/DaCameraGirl">DaCameraGirl</a>
+</p>
 <p align="center">
   <a href="README.md"><img src="https://img.shields.io/badge/🇺🇸_English-a78bfa?style=for-the-badge" alt="English"/></a>
     <a href="README.es.md"><img src="https://img.shields.io/badge/🇪🇸_Español-1e293b?style=for-the-badge" alt="Español"/></a>
@@ -41,7 +71,9 @@
   <img src="DicomForgeBatch/Resources/Icons/DicomForgeBatch.png" width="96" alt="DICOM Forge Batch icon">
 </p>
 
-## The two-repo design
+<p align="center"><img src="docs/readme-divider.svg" width="720" alt="" /></p>
+<p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=070b14&height=50&section=header&text=The%20two-repo%20design&fontSize=22&fontColor=e6edf3" width="720" alt="The two-repo design" /></p>
+
 
 | Repo | Role | Tested |
 |------|------|--------|
@@ -50,7 +82,9 @@
 
 This mirrors how Slicer itself is built (ITK/VTK do the work; the GUI is a shell on top). All the heavy logic lives in `dicom-forge`, so it is fully testable on its own; this repo stays a small, focused front-end.
 
-## What the module does
+<p align="center"><img src="docs/readme-divider.svg" width="720" alt="" /></p>
+<p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=070b14&height=50&section=header&text=What%20the%20module%20does&fontSize=22&fontColor=e6edf3" width="720" alt="What the module does" /></p>
+
 
 1. **Install dependencies** — one button runs `pip_install('dicom-anvil[convert]')` into Slicer's own Python environment (the engine ships on PyPI as `dicom-anvil`; it still imports as `dicomforge`).
 2. **Pick folders** — a DICOM input folder and an output folder.
@@ -59,7 +93,9 @@ This mirrors how Slicer itself is built (ITK/VTK do the work; the GUI is a shell
 
 📖 **New to the module?** Follow the step-by-step [usage tutorial](docs/tutorial.md). See the [changelog](CHANGELOG.md) for what has changed.
 
-## Installation
+<p align="center"><img src="docs/readme-divider.svg" width="720" alt="" /></p>
+<p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=070b14&height=50&section=header&text=Installation&fontSize=22&fontColor=e6edf3" width="720" alt="Installation" /></p>
+
 
 ### From source (developer install)
 
@@ -73,7 +109,9 @@ In Slicer: **Edit → Application Settings → Modules → Additional module pat
 
 The repo is laid out for the standard Slicer extension build (`CMakeLists.txt` + `slicerMacroBuildScriptedModule`) so it can be built against a Slicer build tree and submitted to the [Slicer Extensions Index](https://github.com/Slicer/ExtensionsIndex).
 
-## Module anatomy
+<p align="center"><img src="docs/readme-divider.svg" width="720" alt="" /></p>
+<p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=070b14&height=50&section=header&text=Module%20anatomy&fontSize=22&fontColor=e6edf3" width="720" alt="Module anatomy" /></p>
+
 
 Slicer scripted modules use a fixed four-class shape — this one lives in [`DicomForgeBatch/DicomForgeBatch.py`](DicomForgeBatch/DicomForgeBatch.py):
 
@@ -82,7 +120,9 @@ Slicer scripted modules use a fixed four-class shape — this one lives in [`Dic
 - `DicomForgeBatchLogic` — Qt-free logic wrapping `dicom-forge` (reusable from the Python console).
 - `DicomForgeBatchTest` — a self-test that generates synthetic DICOM and runs the whole pipeline inside Slicer.
 
-## Testing
+<p align="center"><img src="docs/readme-divider.svg" width="720" alt="" /></p>
+<p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=070b14&height=50&section=header&text=Testing&fontSize=22&fontColor=e6edf3" width="720" alt="Testing" /></p>
+
 
 The self-test runs **inside** Slicer (it needs the `slicer` runtime):
 
@@ -95,6 +135,8 @@ CI runs on every push at two levels:
 
 > ⚠️ De-identification is best-effort risk reduction, not a compliance guarantee. See [`dicom-forge`'s SECURITY policy](https://github.com/DaCameraGirl/dicom-forge/blob/main/SECURITY.md).
 
-## License
+<p align="center"><img src="docs/readme-divider.svg" width="720" alt="" /></p>
+<p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=070b14&height=50&section=header&text=License&fontSize=22&fontColor=e6edf3" width="720" alt="License" /></p>
+
 
 [Apache-2.0](LICENSE) © Angela Hudson
