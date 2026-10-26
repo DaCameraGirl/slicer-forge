@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Slicer Forge: a 3D Slicer extension for batch DICOM ingestion, de-identification, quality control, conversion, and scene import."
+    />
+    <meta name="theme-color" content="#09213a" />
+    <title>Slicer Forge | DICOM batch workflows for 3D Slicer</title>
+    <link rel="icon" href="DicomForgeBatch/Resources/Icons/DicomForgeBatch.png" />
+    <link rel="stylesheet" href="docs/site.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="#top" aria-label="Slicer Forge home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="DicomForgeBatch/Resources/Icons/DicomForgeBatch.png" alt="" />
+          </span>
+          <span>
+            <strong>Slicer Forge</strong>
+            <small>DICOM Forge Batch</small>
+          </span>
+        </a>
+
+        <nav class="desktop-nav" aria-label="Primary navigation">
+          <a href="#workflow">Workflow</a>
+          <a href="#projects">Projects</a>
+          <a href="#engineering">Engineering</a>
+          <a href="#fit">Project fit</a>
+        </nav>
+
+        <a
+          class="nav-source"
+          href="https://github.com/DaCameraGirl/slicer-forge"
+          target="_blank"
+          rel="noreferrer"
+        >
+          View source <span aria-hidden="true">↗</span>
+        </a>
+
+        <details class="mobile-nav">
+          <summary><span class="sr-only">Open navigation</span><span aria-hidden="true">Menu</span></summary>
+          <nav aria-label="Mobile navigation">
+            <a href="#workflow">Workflow</a>
+            <a href="#projects">Projects</a>
+            <a href="#engineering">Engineering</a>
+            <a href="#fit">Project fit</a>
+            <a href="https://github.com/DaCameraGirl/slicer-forge" target="_blank" rel="noreferrer">View source ↗</a>
+          </nav>
+        </details>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" id="top">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="kicker"><span aria-hidden="true"></span> 3D Slicer extension</p>
+            <h1>Make the route from DICOM folder to Slicer scene visible.</h1>
+            <p class="hero-summary">
+              Slicer Forge is a focused 3D Slicer interface for batch DICOM work. It drives the
+              headless DICOM Forge pipeline to de-identify series, run quality checks, convert
+              volumes, and optionally load them into a scene.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#workflow">Explore the workflow <span aria-hidden="true">↓</span></a>
+              <a
+                class="button button-secondary"
+                href="https://github.com/DaCameraGirl/slicer-forge/blob/main/docs/tutorial.md"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Read the tutorial <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <div class="hero-notes" aria-label="Project highlights">
+              <span>Python</span>
+              <span>3D Slicer</span>
+              <span>DICOM automation</span>
+              <span>Apache-2.0</span>
+            </div>
+          </div>
+
+          <div class="process-display" role="img" aria-label="Implemented DICOM Forge Batch process: DICOM folders move through de-identification, quality control, conversion, and into a 3D Slicer scene.">
+            <div class="display-header">
+              <span class="live-dot" aria-hidden="true"></span>
+              <span>Process map</span>
+              <span class="display-state">Implemented</span>
+            </div>
+            <div class="display-grid" aria-hidden="true"></div>
+            <div class="display-route" aria-hidden="true">
+              <span class="route-line line-one"></span>
+              <span class="route-line line-two"></span>
+              <span class="route-line line-three"></span>
+              <span class="route-line line-four"></span>
+            </div>
+            <div class="process-node node-source">
+              <span class="node-icon folder-icon"></span>
+              <strong>DICOM</strong>
+              <small>series input</small>
+            </div>
+            <div class="process-node node-deid">
+              <span class="node-icon shield-icon">×</span>
+              <strong>De-identify</strong>
+              <small>basic · moderate · strict</small>
+            </div>
+            <div class="process-node node-qc">
+              <span class="node-icon qc-icon">✓</span>
+              <strong>QC</strong>
+              <small>per-series results</small>
+            </div>
+            <div class="process-node node-convert">
+              <span class="node-icon file-icon"></span>
+              <strong>Convert</strong>
+              <small>NRRD or NIfTI</small>
+            </div>
+            <div class="process-node node-slicer">
+              <span class="slicer-orbit orbit-a"></span>
+              <span class="slicer-orbit orbit-b"></span>
+              <span class="slicer-core">3D</span>
+              <strong>Slicer scene</strong>
+              <small>volume import</small>
+            </div>
+            <p class="display-caption">A concise interface over an independently testable pipeline.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="signal-bar" aria-label="Implementation scope">
+        <div class="container signal-content">
+          <p><span class="signal-label">In scope now</span> Batch ingest, configurable de-identification, QC reporting, NRRD/NIfTI conversion, and optional scene import.</p>
+          <a href="https://github.com/DaCameraGirl/slicer-forge/blob/main/README.md#what-the-module-does" target="_blank" rel="noreferrer">See documented capabilities <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+
+      <section class="section workflow-section" id="workflow">
+        <div class="container">
+          <div class="section-intro split-intro">
+            <div>
+              <p class="kicker dark-kicker"><span aria-hidden="true"></span> Implemented workflow</p>
+              <h2>Five handoffs. One traceable batch path.</h2>
+            </div>
+            <p>
+              The extension groups files by DICOM series, processes each series through DICOM Forge,
+              and presents a readable result inside 3D Slicer. The process below reflects the current
+              module and its tests—not an aspirational product diagram.
+            </p>
+          </div>
+
+          <ol class="workflow-list">
+            <li>
+              <span class="step-number">01</span>
+              <div class="workflow-icon workflow-folder" aria-hidden="true"></div>
+              <div>
+                <h3>Ingest folders</h3>
+                <p>Select a source folder and destination. Series are discovered and grouped before the batch starts.</p>
+              </div>
+            </li>
+            <li>
+              <span class="step-number">02</span>
+              <div class="workflow-icon workflow-shield" aria-hidden="true">×</div>
+              <div>
+                <h3>De-identify</h3>
+                <p>Choose basic, moderate, or strict removal of patient-identifying header data.</p>
+              </div>
+            </li>
+            <li>
+              <span class="step-number">03</span>
+              <div class="workflow-icon workflow-check" aria-hidden="true">✓</div>
+              <div>
+                <h3>Quality control</h3>
+                <p>Capture per-series QC results, including warnings and a visible PASS or FAIL status.</p>
+              </div>
+            </li>
+            <li>
+              <span class="step-number">04</span>
+              <div class="workflow-icon workflow-file" aria-hidden="true"></div>
+              <div>
+                <h3>Convert volumes</h3>
+                <p>Write Slicer-friendly NRRD or NIfTI output, with NRRD offered as the recommended format.</p>
+              </div>
+            </li>
+            <li>
+              <span class="step-number">05</span>
+              <div class="workflow-icon workflow-scene" aria-hidden="true"><i></i></div>
+              <div>
+                <h3>Import to 3D Slicer</h3>
+                <p>Optionally load every converted volume into the active scene, ready for the next workflow step.</p>
+              </div>
+            </li>
+          </ol>
+
+          <aside class="privacy-note">
+            <span class="privacy-mark" aria-hidden="true">!</span>
+            <p><strong>Privacy boundary:</strong> de-identification is best-effort risk reduction, not a compliance guarantee. Validate output against the requirements that apply to your environment.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section projects-section" id="projects">
+        <div class="container">
+          <div class="section-intro narrow-intro">
+            <p class="kicker dark-kicker"><span aria-hidden="true"></span> Two repositories, clear responsibilities</p>
+            <h2>A thin Slicer interface backed by a headless processing engine.</h2>
+          </div>
+
+          <div class="project-pair">
+            <article class="project-card project-slicer">
+              <div class="project-card-topline">
+                <span class="project-symbol">SF</span>
+                <span class="project-state">This repository</span>
+              </div>
+              <h3>Slicer Forge</h3>
+              <p class="project-tagline">The focused 3D Slicer extension.</p>
+              <p>
+                <code>DicomForgeBatch</code> provides folder selectors, processing options, a dependency
+                installer for Slicer’s Python environment, responsive batch controls, cancellation, and a
+                per-series result view.
+              </p>
+              <ul>
+                <li>Scripted module in Slicer’s Informatics category</li>
+                <li>Qt-free logic layer reusable from the Python console</li>
+                <li>Standard CMake extension layout with a module self-test</li>
+              </ul>
+              <a class="text-link" href="https://github.com/DaCameraGirl/slicer-forge" target="_blank" rel="noreferrer">Explore Slicer Forge <span aria-hidden="true">↗</span></a>
+            </article>
+
+            <article class="project-card project-dicom">
+              <div class="project-card-topline">
+                <span class="project-symbol">DF</span>
+                <span class="project-state">Upstream engine</span>
+              </div>
+              <h3>DICOM Forge</h3>
+              <p class="project-tagline">The independently testable, headless pipeline.</p>
+              <p>
+                DICOM Forge owns the processing path used by the module: ingest, de-identification, QC,
+                and conversion. Slicer Forge installs the published package as <code>dicom-anvil[convert]</code>,
+                which imports as <code>dicomforge</code>.
+              </p>
+              <ul>
+                <li>Separates processing logic from the Slicer interface</li>
+                <li>Supports a scriptable and headless workflow</li>
+                <li>Linked as a distinct project and source of pipeline provenance</li>
+              </ul>
+              <a class="text-link" href="https://github.com/DaCameraGirl/dicom-forge" target="_blank" rel="noreferrer">Explore DICOM Forge <span aria-hidden="true">↗</span></a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section architecture-section" id="engineering">
+        <div class="container architecture-grid">
+          <div class="architecture-copy">
+            <p class="kicker"><span aria-hidden="true"></span> Technical architecture</p>
+            <h2>Keep the clinical desktop interface thin. Keep the pipeline testable.</h2>
+            <p>
+              Slicer Forge makes the handoff between a Slicer workflow and a Python processing engine explicit.
+              The widget owns interaction; the logic owns pipeline orchestration; DICOM Forge owns the
+              batch-processing primitives.
+            </p>
+            <a class="button button-quiet" href="https://github.com/DaCameraGirl/slicer-forge/blob/main/DicomForgeBatch/DicomForgeBatch.py" target="_blank" rel="noreferrer">Inspect the module structure <span aria-hidden="true">↗</span></a>
+          </div>
+
+          <div class="architecture-map" aria-label="Architecture diagram">
+            <div class="arch-stage arch-input">
+              <span>Input</span>
+              <strong>DICOM folder</strong>
+              <small>one or more series</small>
+            </div>
+            <div class="arch-arrow" aria-hidden="true">→</div>
+            <div class="arch-stage arch-module">
+              <span>3D Slicer</span>
+              <strong>DicomForgeBatch</strong>
+              <small>Widget + Qt-free logic</small>
+            </div>
+            <div class="arch-arrow" aria-hidden="true">→</div>
+            <div class="arch-stage arch-engine">
+              <span>Python engine</span>
+              <strong>DICOM Forge</strong>
+              <small>ingest · de-id · QC · convert</small>
+            </div>
+            <div class="arch-return" aria-hidden="true">
+              <span>converted volume</span>
+              <i>↳</i>
+            </div>
+            <div class="arch-stage arch-scene">
+              <span>3D Slicer</span>
+              <strong>MRML scene</strong>
+              <small>optional volume import</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section verification-section">
+        <div class="container verification-grid">
+          <div>
+            <p class="kicker dark-kicker"><span aria-hidden="true"></span> Testing and CI</p>
+            <h2>Verification reaches beyond a static code check.</h2>
+            <p>
+              The repository’s GitHub Actions workflows combine quick feedback with an end-to-end run in a
+              real, headless 3D Slicer runtime. The tests generate synthetic DICOM data at runtime; this
+              project does not need real patient data to exercise the workflow.
+            </p>
+            <a class="text-link" href="https://github.com/DaCameraGirl/slicer-forge/actions" target="_blank" rel="noreferrer">Review GitHub Actions workflows <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="test-matrix">
+            <div class="matrix-heading"><span>CI surface</span><span>Coverage in repository</span></div>
+            <div class="matrix-row"><span class="matrix-mark mark-blue">01</span><div><strong>Fast checks</strong><small>Ruff lint, formatting check, and Python byte-compilation.</small></div></div>
+            <div class="matrix-row"><span class="matrix-mark mark-teal">02</span><div><strong>Synthetic data</strong><small>Generates and re-reads a small synthetic CT DICOM series.</small></div></div>
+            <div class="matrix-row"><span class="matrix-mark mark-orange">03</span><div><strong>Headless Slicer</strong><small>Runs the pipeline in a downloaded 3D Slicer runtime.</small></div></div>
+            <div class="matrix-row"><span class="matrix-mark mark-blue">04</span><div><strong>Workflow edges</strong><small>Exercises CT/MR series, both outputs, de-id levels, cancellation, and error paths.</small></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section status-section" id="fit">
+        <div class="container status-grid">
+          <article class="status-card implementation-card">
+            <p class="kicker dark-kicker"><span aria-hidden="true"></span> Current implementation</p>
+            <h2>What exists today</h2>
+            <ul class="check-list">
+              <li>3D Slicer scripted module and extension build configuration</li>
+              <li>DICOM folder batch processing with basic, moderate, and strict settings</li>
+              <li>QC summaries, NRRD/NIfTI output, and optional volume loading</li>
+              <li>Automated lint, synthetic-data, and headless-Slicer CI workflows</li>
+            </ul>
+          </article>
+
+          <article class="status-card planned-card">
+            <p class="kicker light-kicker"><span aria-hidden="true"></span> Prepared, not implemented</p>
+            <h2>What remains external</h2>
+            <p>
+              The repository includes a prepared Slicer Extensions Index catalog entry, but it has not been
+              submitted. Its documented submission checklist still calls for live screenshots and community
+              announcement before an upstream pull request.
+            </p>
+            <a class="text-link light-link" href="https://github.com/DaCameraGirl/slicer-forge/tree/main/extensions-index" target="_blank" rel="noreferrer">Read the prepared submission notes <span aria-hidden="true">↗</span></a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section fit-section">
+        <div class="container fit-grid">
+          <div class="fit-emblem" aria-hidden="true">
+            <span>01</span><i></i><span>10</span>
+          </div>
+          <div>
+            <p class="kicker dark-kicker"><span aria-hidden="true"></span> About / project fit</p>
+            <h2>Engineering the connective tissue around imaging workflows.</h2>
+          </div>
+          <div class="fit-copy">
+            <p>
+              My specialty is Python engineering, DICOM processing, automation, software integration, and
+              test infrastructure. This project is designed around that intersection: a clean interface for
+              an established desktop environment, backed by a separated pipeline and repeatable verification.
+            </p>
+            <p>
+              The focus is engineering reliable workflow tooling—not presenting advanced clinical 3D Slicer
+              operation, manual segmentation, or specialized medical-image interpretation expertise.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="resources-section">
+        <div class="container resources-content">
+          <div>
+            <p class="kicker"><span aria-hidden="true"></span> Get oriented</p>
+            <h2>Source, setup, and practical documentation.</h2>
+          </div>
+          <div class="resource-links">
+            <a href="https://github.com/DaCameraGirl/slicer-forge" target="_blank" rel="noreferrer"><span>Repository</span><strong>Browse the source</strong><i aria-hidden="true">↗</i></a>
+            <a href="https://github.com/DaCameraGirl/slicer-forge/blob/main/README.md#installation" target="_blank" rel="noreferrer"><span>Installation</span><strong>Add the module from source</strong><i aria-hidden="true">↗</i></a>
+            <a href="https://github.com/DaCameraGirl/slicer-forge/blob/main/docs/tutorial.md" target="_blank" rel="noreferrer"><span>Tutorial</span><strong>Run your first batch</strong><i aria-hidden="true">↗</i></a>
+            <a href="https://github.com/DaCameraGirl/dicom-forge" target="_blank" rel="noreferrer"><span>Pipeline</span><strong>Explore DICOM Forge</strong><i aria-hidden="true">↗</i></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <a class="brand footer-brand" href="#top">
+          <span class="brand-mark" aria-hidden="true"><img src="DicomForgeBatch/Resources/Icons/DicomForgeBatch.png" alt="" /></span>
+          <span><strong>Slicer Forge</strong><small>Engineering DICOM workflows for 3D Slicer</small></span>
+        </a>
+        <p>Apache-2.0 licensed · Built from the documented capabilities of this repository.</p>
+      </div>
+    </footer>
+  </body>
+</html>
