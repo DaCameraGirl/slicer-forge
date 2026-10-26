@@ -11,6 +11,7 @@
     <title>Slicer Forge | DICOM batch workflows for 3D Slicer</title>
     <link rel="icon" href="DicomForgeBatch/Resources/Icons/DicomForgeBatch.png" />
     <link rel="stylesheet" href="docs/site.css" />
+    <script src="docs/site.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -29,6 +30,7 @@
 
         <nav class="desktop-nav" aria-label="Primary navigation">
           <a href="#workflow">Workflow</a>
+          <a href="#simulator">Simulator</a>
           <a href="#projects">Projects</a>
           <a href="#engineering">Engineering</a>
           <a href="#fit">Project fit</a>
@@ -47,6 +49,7 @@
           <summary><span class="sr-only">Open navigation</span><span aria-hidden="true">Menu</span></summary>
           <nav aria-label="Mobile navigation">
             <a href="#workflow">Workflow</a>
+            <a href="#simulator">Simulator</a>
             <a href="#projects">Projects</a>
             <a href="#engineering">Engineering</a>
             <a href="#fit">Project fit</a>
@@ -61,7 +64,7 @@
         <div class="container hero-grid">
           <div class="hero-copy">
             <p class="kicker"><span aria-hidden="true"></span> 3D Slicer extension</p>
-            <h1>Make the route from DICOM folder to Slicer scene visible.</h1>
+            <h1>Batch DICOM into 3D Slicer with a testable Python pipeline.</h1>
             <p class="hero-summary">
               Slicer Forge is a focused 3D Slicer interface for batch DICOM work. It drives the
               headless DICOM Forge pipeline to de-identify series, run quality checks, convert
@@ -199,6 +202,72 @@
             <span class="privacy-mark" aria-hidden="true">!</span>
             <p><strong>Privacy boundary:</strong> de-identification is best-effort risk reduction, not a compliance guarantee. Validate output against the requirements that apply to your environment.</p>
           </aside>
+        </div>
+      </section>
+
+      <section class="section simulator-section" id="simulator" aria-labelledby="simulator-title">
+        <div class="container">
+          <div class="section-intro simulator-intro">
+            <div>
+              <p class="kicker dark-kicker"><span aria-hidden="true"></span> Interactive walkthrough</p>
+              <h2 id="simulator-title">Trace a synthetic batch without touching a file.</h2>
+            </div>
+            <p>
+              This is a browser-only illustration of the implemented pipeline sequence. It does not read,
+              upload, de-identify, or convert DICOM data; use it to see the handoffs the Slicer module coordinates.
+            </p>
+          </div>
+
+          <div class="simulator-shell" data-simulator>
+            <aside class="simulator-controls" aria-label="Simulator controls">
+              <span class="simulator-badge">Illustrative dry run</span>
+              <h3>Synthetic CT + MR batch</h3>
+              <p>Two sample series progress through the same stages exercised in the repository’s end-to-end test.</p>
+              <div class="simulator-actions">
+                <button class="button button-primary" type="button" data-sim-start>Run walkthrough <span aria-hidden="true">→</span></button>
+                <button class="simulator-reset" type="button" data-sim-reset disabled>Reset</button>
+              </div>
+              <p class="simulator-status" data-sim-status role="status">Ready to trace five workflow stages.</p>
+              <p class="simulator-boundary"><span aria-hidden="true">◎</span> No DICOM files are opened, stored, or transmitted.</p>
+            </aside>
+
+            <div class="simulator-workspace">
+              <div class="simulator-workspace-header">
+                <span>Pipeline trace</span>
+                <span data-sim-indicator>Idle</span>
+              </div>
+              <ol class="simulator-steps" aria-label="Synthetic workflow stages">
+                <li class="simulator-step" data-sim-step="0">
+                  <span class="simulator-step-number">01</span>
+                  <div><strong>Ingest</strong><small>Discover 2 series</small></div>
+                  <i aria-hidden="true"></i>
+                </li>
+                <li class="simulator-step" data-sim-step="1">
+                  <span class="simulator-step-number">02</span>
+                  <div><strong>De-identify</strong><small>Moderate policy</small></div>
+                  <i aria-hidden="true"></i>
+                </li>
+                <li class="simulator-step" data-sim-step="2">
+                  <span class="simulator-step-number">03</span>
+                  <div><strong>Quality control</strong><small>Geometry check</small></div>
+                  <i aria-hidden="true"></i>
+                </li>
+                <li class="simulator-step" data-sim-step="3">
+                  <span class="simulator-step-number">04</span>
+                  <div><strong>Convert</strong><small>NRRD output</small></div>
+                  <i aria-hidden="true"></i>
+                </li>
+                <li class="simulator-step" data-sim-step="4">
+                  <span class="simulator-step-number">05</span>
+                  <div><strong>Scene import</strong><small>2 volumes loaded</small></div>
+                  <i aria-hidden="true"></i>
+                </li>
+              </ol>
+              <div class="simulator-log" data-sim-log aria-live="polite">
+                <p><span class="log-prompt">›</span> Awaiting a simulated batch run.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -352,17 +421,18 @@
           </div>
           <div>
             <p class="kicker dark-kicker"><span aria-hidden="true"></span> About / project fit</p>
-            <h2>Engineering the connective tissue around imaging workflows.</h2>
+            <h2>Software architecture and delivery discipline around imaging workflows.</h2>
           </div>
           <div class="fit-copy">
             <p>
-              My specialty is Python engineering, DICOM processing, automation, software integration, and
-              test infrastructure. This project is designed around that intersection: a clean interface for
-              an established desktop environment, backed by a separated pipeline and repeatable verification.
+              This project demonstrates a DevOps-minded software architecture: a small integration surface,
+              a separated Python processing engine, synthetic-data checks, and automated end-to-end verification
+              in a real headless 3D Slicer runtime.
             </p>
             <p>
-              The focus is engineering reliable workflow tooling—not presenting advanced clinical 3D Slicer
-              operation, manual segmentation, or specialized medical-image interpretation expertise.
+              My strengths are Python engineering, DICOM processing, automation, software integration, and test
+              infrastructure. The focus is workflow tooling and delivery quality—not clinical image interpretation,
+              manual segmentation, or advanced operator training.
             </p>
           </div>
         </div>
