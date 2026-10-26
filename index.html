@@ -146,41 +146,34 @@
           <div class="section-intro evidence-intro">
             <div>
               <p class="kicker dark-kicker"><span aria-hidden="true"></span> Desktop validation</p>
-              <h2 id="evidence-title">Real module. Synthetic data. Captured inside 3D Slicer.</h2>
+              <h2 id="evidence-title">Real module. Public DICOM. Captured inside 3D Slicer.</h2>
             </div>
             <aside class="evidence-scope">
               <strong>Desktop run scope</strong>
-              <p>Windows · 3D Slicer 5.10 · synthetic CT + MR · moderate de-identification · NRRD · two volumes loaded.</p>
+              <p>Windows · 3D Slicer 5.10 · 32-slice public brain MR · moderate de-identification · NRRD · one volume loaded.</p>
             </aside>
           </div>
 
           <div class="evidence-gallery">
             <figure class="evidence-figure evidence-primary">
-              <img src="docs/assets/slicer-synthetic-processing.png" alt="Actual 3D Slicer window showing DICOM Forge Batch processing two synthetic CT and MR series with QC PASS results." />
+              <img src="docs/assets/slicer-remind-qc-pass.png" alt="Actual 3D Slicer window showing the DICOM Forge Batch module processing a 32-slice MR series with a QC PASS result and its loaded brain MR image." />
               <figcaption>
                 <span class="evidence-index">01</span>
-                <span><strong>Synthetic batch completed</strong>Two series converted to NRRD with QC=PASS in the module results panel.</span>
+                <span><strong>Public DICOM batch completed</strong>A 32-slice MR series completed with QC=PASS and wrote NRRD output in the module results panel.</span>
               </figcaption>
             </figure>
             <div class="evidence-supporting">
               <figure class="evidence-figure">
-                <img src="docs/assets/slicer-extension-loaded.png" alt="Actual 3D Slicer window with the DICOM Forge Batch module selected and its dependency, input, and output controls visible." />
+                <img src="docs/assets/slicer-remind-volume-loaded.png" alt="Actual 3D Slicer slice view showing the brain MR volume produced by the completed DICOM Forge Batch run." />
                 <figcaption>
                   <span class="evidence-index">02</span>
-                  <span><strong>Extension loaded</strong>The module is present in the running 3D Slicer application.</span>
-                </figcaption>
-              </figure>
-              <figure class="evidence-figure">
-                <img src="docs/assets/slicer-volume-loaded.png" alt="Actual 3D Slicer red slice view showing a loaded synthetic DICOM Forge volume with the batch results visible in the module panel." />
-                <figcaption>
-                  <span class="evidence-index">03</span>
-                  <span><strong>Volume displayed</strong>A converted synthetic volume is loaded in Slicer’s slice viewer.</span>
+                  <span><strong>Converted volume displayed</strong>The NRRD output from that run is loaded in Slicer’s slice viewer.</span>
                 </figcaption>
               </figure>
             </div>
           </div>
 
-          <p class="evidence-boundary"><strong>Scope boundary:</strong> these captures establish the specific desktop run above. They do not, by themselves, establish NIfTI output or basic/strict de-identification behavior on this machine; those scenarios remain covered by the repository's automated test design.</p>
+          <p class="evidence-boundary"><strong>Source and scope:</strong> public, deidentified MR data from <a href="https://www.cancerimagingarchive.net/collection/remind/" target="_blank" rel="noreferrer">TCIA’s ReMIND collection (CC BY 4.0)</a>, archive-assigned case ReMIND-086. These captures establish the specific 32-slice MR run shown: moderate de-identification, QC=PASS, NRRD output, and scene import. They do not establish NIfTI output, basic/strict settings, or clinical interpretation.</p>
         </div>
       </section>
 
