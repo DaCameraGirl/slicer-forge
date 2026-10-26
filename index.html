@@ -141,6 +141,49 @@
         </div>
       </section>
 
+      <section class="section evidence-section" id="evidence" aria-labelledby="evidence-title">
+        <div class="container">
+          <div class="section-intro evidence-intro">
+            <div>
+              <p class="kicker dark-kicker"><span aria-hidden="true"></span> Desktop validation</p>
+              <h2 id="evidence-title">Real module. Synthetic data. Captured inside 3D Slicer.</h2>
+            </div>
+            <aside class="evidence-scope">
+              <strong>Desktop run scope</strong>
+              <p>Windows · 3D Slicer 5.10 · synthetic CT + MR · moderate de-identification · NRRD · two volumes loaded.</p>
+            </aside>
+          </div>
+
+          <div class="evidence-gallery">
+            <figure class="evidence-figure evidence-primary">
+              <img src="docs/assets/slicer-synthetic-processing.png" alt="Actual 3D Slicer window showing DICOM Forge Batch processing two synthetic CT and MR series with QC PASS results." />
+              <figcaption>
+                <span class="evidence-index">01</span>
+                <span><strong>Synthetic batch completed</strong>Two series converted to NRRD with QC=PASS in the module results panel.</span>
+              </figcaption>
+            </figure>
+            <div class="evidence-supporting">
+              <figure class="evidence-figure">
+                <img src="docs/assets/slicer-extension-loaded.png" alt="Actual 3D Slicer window with the DICOM Forge Batch module selected and its dependency, input, and output controls visible." />
+                <figcaption>
+                  <span class="evidence-index">02</span>
+                  <span><strong>Extension loaded</strong>The module is present in the running 3D Slicer application.</span>
+                </figcaption>
+              </figure>
+              <figure class="evidence-figure">
+                <img src="docs/assets/slicer-volume-loaded.png" alt="Actual 3D Slicer red slice view showing a loaded synthetic DICOM Forge volume with the batch results visible in the module panel." />
+                <figcaption>
+                  <span class="evidence-index">03</span>
+                  <span><strong>Volume displayed</strong>A converted synthetic volume is loaded in Slicer’s slice viewer.</span>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <p class="evidence-boundary"><strong>Scope boundary:</strong> these captures establish the specific desktop run above. They do not, by themselves, establish NIfTI output or basic/strict de-identification behavior on this machine; those scenarios remain covered by the repository's automated test design.</p>
+        </div>
+      </section>
+
       <section class="section workflow-section" id="workflow">
         <div class="container">
           <div class="section-intro split-intro">

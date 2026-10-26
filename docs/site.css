@@ -204,6 +204,23 @@ h3 { margin-bottom: 8px; font-size: 1.21rem; letter-spacing: -.035em; }
 .split-intro > p { max-width: 470px; margin: 0 0 5px; color: #4e667b; font-size: 1.02rem; }
 .narrow-intro { max-width: 820px; }
 
+.evidence-section { background: #edf4f7; }
+.evidence-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(265px, .43fr); align-items: end; gap: 72px; }
+.evidence-intro h2 { max-width: 680px; margin-bottom: 0; }
+.evidence-scope { padding: 17px 18px; border-left: 3px solid var(--blue); background: #dcebf2; }
+.evidence-scope strong { display: block; margin-bottom: 4px; color: var(--blue-deep); font-family: var(--mono); font-size: .64rem; letter-spacing: .06em; text-transform: uppercase; }
+.evidence-scope p { margin: 0; color: #45647a; font-size: .83rem; line-height: 1.48; }
+.evidence-gallery { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(290px, .75fr); gap: 22px; align-items: stretch; }
+.evidence-supporting { display: grid; grid-template-rows: 1fr 1fr; gap: 22px; }
+.evidence-figure { display: grid; grid-template-rows: auto 1fr; overflow: hidden; margin: 0; border: 1px solid #bdcfda; background: var(--white); box-shadow: 0 12px 28px rgba(21, 64, 93, .08); }
+.evidence-figure img { width: 100%; height: auto; border-bottom: 1px solid #cddce4; }
+.evidence-primary img { align-self: center; }
+.evidence-figure figcaption { display: flex; gap: 12px; padding: 14px 16px 15px; color: #567087; font-size: .76rem; line-height: 1.4; }
+.evidence-figure figcaption span:last-child { display: grid; gap: 2px; }
+.evidence-figure figcaption strong { color: var(--navy); font-size: .82rem; }
+.evidence-index { display: grid; flex: 0 0 auto; width: 23px; height: 23px; place-items: center; border: 1px solid #9dc0d2; border-radius: 50%; color: var(--blue-deep); font-family: var(--mono); font-size: .57rem; font-weight: 800; }
+.evidence-boundary { max-width: 920px; margin: 25px 0 0; color: #5a7183; font-size: .84rem; }
+
 .workflow-section { background: var(--white); }
 .workflow-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin: 0; padding: 0; list-style: none; counter-reset: none; }
 .workflow-list li { position: relative; min-height: 263px; padding: 18px 22px 21px; border-left: 1px solid var(--line); }
@@ -376,6 +393,10 @@ code { padding: 1px 4px; border-radius: 3px; background: #eaf2f6; color: #164d86
   .project-pair, .verification-grid, .resources-content { grid-template-columns: 1fr; }
   .architecture-grid { grid-template-columns: 1fr; }
   .architecture-copy { max-width: 600px; }
+  .evidence-intro { grid-template-columns: 1fr; gap: 20px; }
+  .evidence-scope { max-width: 600px; }
+  .evidence-gallery { grid-template-columns: 1fr; }
+  .evidence-supporting { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
   .simulator-intro { grid-template-columns: 1fr; gap: 18px; }
   .simulator-shell { grid-template-columns: 1fr; }
   .simulator-controls > p:not(.simulator-status, .simulator-boundary) { max-width: 570px; }
@@ -410,6 +431,8 @@ code { padding: 1px 4px; border-radius: 3px; background: #eaf2f6; color: #164d86
   .workflow-icon { margin: 0; align-self: center; }
   .workflow-folder { margin-top: 8px; }
   .workflow-list h3 { margin-top: 0; }
+  .evidence-supporting { grid-template-columns: 1fr; }
+  .evidence-figure figcaption { padding: 12px 13px; }
   .simulator-controls { padding: 30px 23px; }
   .simulator-steps { grid-template-columns: 1fr; gap: 0; padding: 18px 18px 8px; }
   .simulator-step { display: grid; grid-template-columns: 42px 1fr 25px; align-items: center; min-height: 72px; padding: 12px 13px; border: 0; border-top: 1px solid #ccdde5; }
