@@ -55,7 +55,7 @@ This mirrors how Slicer itself is built (ITK/VTK do the work; the GUI is a shell
 1. **Install dependencies** — one button runs `pip_install('dicom-anvil[convert]')` into Slicer's own Python environment (the engine ships on PyPI as `dicom-anvil`; it still imports as `dicomforge`).
 2. **Pick folders** — a DICOM input folder and an output folder.
 3. **Choose options** — de-identification level (basic / moderate / strict) and output format (NRRD / NIfTI).
-4. **Run** — every series is de-identified → QC'd → converted → loaded into the scene, with a per-series PASS/FAIL summary and warnings. Long runs stay responsive and can be cancelled.
+4. **Run** — every series is de-identified → QC'd → converted → loaded into the scene, with a per-series PASS/FAIL summary and warnings. **Cancel** stops the batch after the current series; the panel updates between series.
 
 📖 **New to the module?** Follow the step-by-step [usage tutorial](docs/tutorial.md). See the [changelog](CHANGELOG.md) for what has changed.
 
@@ -86,7 +86,7 @@ Slicer scripted modules use a fixed four-class shape — this one lives in [`Dic
 
 The self-test runs **inside** Slicer (it needs the `slicer` runtime):
 
-> Slicer → **Developer Tools → Self Tests** → run *DicomForgeBatch*, or from the Python console: `slicer.util.selfTest('DicomForgeBatch')`.
+> In Slicer's **SelfTests** module (category *Testing*) run *DicomForgeBatch*, or from the Python console: `slicer.selfTests['DicomForgeBatch']()`.
 
 CI runs on every push at two levels:
 
